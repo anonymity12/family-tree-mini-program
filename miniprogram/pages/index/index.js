@@ -8,8 +8,12 @@ Page({
     userInfo: {
       avatarUrl: '',
       nickName: '沈复',
-      points: '8.35'
+      points: '8.35',
+      checkInDays: 15,
+      streakDays: 7,
+      totalPoints: 235
     },
+    selectedCheckinType: '',
     familyMembers: [
       {
         id: 1,
@@ -165,5 +169,52 @@ Page({
   navigateToFunction(e) {
     const { url } = e.currentTarget.dataset;
     wx.navigateTo({ url });
-  }
+  },
+
+  handleCheckin(e) {
+    const type = e.currentTarget.dataset.type;
+    // Remove selected class from all options
+    const options = this.selectAllComponents('.checkin-option');
+    options.forEach(option => {
+      option.removeClass('selected');
+    });
+    // Add selected class to clicked option
+    e.currentTarget.addClass('selected');
+    this.setData({
+      selectedCheckinType: type
+    });
+  },
+
+  submitCheckin() {
+    if (!this.data.selectedCheckinType) {
+      wx.showToast({
+        title: '请先选择打卡类型',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    // Here you would typically make an API call to your backend
+    // For now, we'll just show a success message
+    wx.showToast({
+      title: '打卡成功！',
+      icon: 'success',
+      duration: 2000
+    });
+
+    // Update local stats
+    this.setData({
+      'userInfo.checkInDays': this.data.userInfo.checkInDays + 1,
+      'userInfo.streakDays': this.data.userInfo.streakDays + 1,
+      'userInfo.totalPoints': this.data.userInfo.totalPoints + 10,
+      selectedCheckinType: ''
+    });
+
+    // Remove selected class from all options
+    const options = this.selectAllComponents('.checkin-option');
+    options.forEach(option => {
+      option.removeClass('selected');
+    });
+  },
 });

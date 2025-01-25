@@ -48,6 +48,29 @@
       </view>
     </view>
 
+    <!-- Quick Check-in section -->
+    <view class="quick-checkin">
+      <view class="quick-checkin-title">今日打卡</view>
+      <view class="checkin-options">
+        <view class="checkin-option" bindtap="handleCheckin" data-type="exercise">
+          <image class="option-icon" src="../../images/exercise-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">运动</text>
+        </view>
+        <view class="checkin-option" bindtap="handleCheckin" data-type="reading">
+          <image class="option-icon" src="../../images/reading-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">阅读</text>
+        </view>
+        <view class="checkin-option" bindtap="handleCheckin" data-type="study">
+          <image class="option-icon" src="../../images/study-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">学习</text>
+        </view>
+      </view>
+      <button class="checkin-button" bindtap="submitCheckin">
+        <text class="button-text">确认打卡</text>
+        <text class="button-desc">点击这里完成今日打卡</text>
+      </button>
+    </view>
+
     <!-- Family members check-in summary -->
     <view class="family-summary">
       <view class="section-title">排行榜</view>
