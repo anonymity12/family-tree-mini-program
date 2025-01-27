@@ -1,0 +1,6 @@
+<view class="container">
+  <view class="family-tree">
+    <!-- 家谱内容将在这里展示 -->
+    <text>家谱页面</text>
+  </view>
+</view>
