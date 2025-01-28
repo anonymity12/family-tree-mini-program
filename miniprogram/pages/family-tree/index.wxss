@@ -184,3 +184,177 @@
 .tree-node {
   transition: all 0.3s ease-in-out;
 }
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.textarea {
+  width: 100%;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.parent-selector {
+  width: 100%;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+}
+
+.btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn.submit {
+  background: #4CAF50;
+  color: white;
+}
+
+.member-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.member-modal .modal-content {
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-btn {
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+}
+
+.picker-view {
+  width: 100%;
+  height: 36px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+}
+
+.member-modal .form-group {
+  margin-bottom: 20px;
+}
+
+.member-modal .label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.member-modal .input,
+.member-modal .textarea,
+.member-modal .picker-view,
+.member-modal .parent-selector {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background: white;
+}
+
+.member-modal .textarea {
+  height: 80px;
+  resize: none;
+}
+
+.member-modal .parent-selector {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.member-modal .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.member-modal .btn {
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.member-modal .btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.member-modal .btn.submit {
+  background: #4CAF50;
+  color: white;
+}
