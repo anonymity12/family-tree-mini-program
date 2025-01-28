@@ -68,17 +68,23 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* 确保弹窗在最上层 */
 }
 
 .modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
   width: 80%;
-  background: #fff;
-  border-radius: 20rpx;
-  padding: 30rpx;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1001; /* 确保内容在遮罩层之上 */
 }
 
 .modal-header {
