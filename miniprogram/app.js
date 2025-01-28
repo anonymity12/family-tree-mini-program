@@ -12,6 +12,9 @@ App({
         env: "",
         traceUser: true,
       });
+      wx.navigateTo({
+        url: '/pages/family-tree/index'
+      })
     }
 
     this.globalData = {};

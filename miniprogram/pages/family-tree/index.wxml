@@ -1,6 +1,55 @@
 <view class="container">
-  <view class="family-tree">
-    <!-- 家谱内容将在这里展示 -->
-    <text>家谱页面</text>
+  <!-- 顶部搜索栏 -->
+  <view class="search-bar">
+    <input type="text" placeholder="搜索家庭成员" bindinput="onSearch" class="search-input" />
+  </view>
+
+  <!-- 工具栏 -->
+  <view class="toolbar">
+    <button class="tool-btn" bindtap="addMember">添加成员</button>
+    <button class="tool-btn" bindtap="editMode">编辑模式</button>
+  </view>
+
+  <!-- 家谱树展示区域 -->
+  <scroll-view class="family-tree-container" scroll-x="true" scroll-y="true" enhanced="true" show-scrollbar="true">
+    <view class="family-tree">
+      <block wx:for="{{treeNodes}}" wx:key="id">
+        <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
+          <view class="node-content" bindtap="onNodeTap" data-member="{{item.member}}">
+            <image class="avatar" src="{{item.member.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+            <text class="name">{{item.member.name}}</text>
+          </view>
+          <view class="node-connection" wx:if="{{item.hasChildren}}"></view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 成员详情弹窗 -->
+  <view class="member-detail-modal" wx:if="{{showMemberDetail}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">成员详情</text>
+        <text class="close-btn" bindtap="closeMemberDetail">×</text>
+      </view>
+      <view class="member-info">
+        <view class="info-item">
+          <text class="label">姓名：</text>
+          <text>{{currentMember.name}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">出生日期：</text>
+          <text>{{currentMember.birthDate}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">关系：</text>
+          <text>{{currentMember.relation}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">简介：</text>
+          <text>{{currentMember.description}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>
