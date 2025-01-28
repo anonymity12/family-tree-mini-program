@@ -47,13 +47,14 @@
   width: 100%;
   height: calc(100vh - 120px); /* Adjust based on your header height */
   position: relative;
+  overflow: auto;
 }
 
 .family-tree {
   position: relative;
   min-width: 100%;
   min-height: 100%;
-  padding: 20rpx;
+  padding: 50px 20px;
 }
 
 .family-tree-canvas {
@@ -115,17 +116,39 @@
   position: absolute;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease;
+  min-width: 120px;
+  z-index: 1;
 }
 
 .node-content {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100px;
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn {
+  position: absolute;
+  bottom: -15px;
+  width: 20px;
+  height: 20px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.toggle-btn.collapsed {
+  background: #2196F3;
 }
 
 .avatar {

@@ -8,9 +8,9 @@ Page({
     isEditMode: false, // 是否处于编辑模式
     nodeWidth: 120, // 节点宽度
     nodeHeight: 150, // 节点高度
-    levelHeight: 180, // 层级高度
+    levelHeight: 200, // 层级高度
     horizontalGap: 50, // 节点之间的水平间距
-    verticalGap: 80, // 节点之间的垂直间距
+    verticalPadding: 100, // 顶部内边距
   },
 
   onLoad: function(options) {
@@ -75,34 +75,47 @@ Page({
 
   // 计算树形布局
   calculateTreeLayout(rootMember) {
-    const nodes = [];
-    const visited = new Set();
-    const minSpacing = this.data.nodeWidth + 40; // 最小节点间距
+    const minSpacing = this.data.nodeWidth + this.data.horizontalGap;
 
     const traverse = (member, level, offset) => {
-      if (!member || visited.has(member.id)) return { width: 0, nodes: [] };
-      visited.add(member.id);
+      if (!member) return { width: 0, nodes: [] };
 
-      // 获取所有子节点
-      const children = this.data.members.filter(m => m.parentId === member.id);
+      const nodes = [];
       let totalWidth = 0;
-      let childrenNodes = [];
-      let lastChildEndX = offset; // 跟踪最后一个子节点的结束位置
+      const children = this.data.members.filter(m => m.parentId === member.id);
 
-      // 递归处理子节点
-      for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        // 确保每个子树从上一个子树的结束位置开始
-        const childOffset = Math.max(lastChildEndX, offset + totalWidth);
+      // 检查节点是否已折叠
+      const existingNode = this.data.treeNodes ? this.data.treeNodes.find(n => n.id === member.id) : null;
+      const isCollapsed = existingNode ? existingNode.collapsed : false;
+
+      // 如果节点已折叠，不处理其子节点
+      if (isCollapsed) {
+        const x = offset + minSpacing / 2;
+        const y = this.data.verticalPadding + (level * this.data.levelHeight);
+        
+        nodes.push({
+          id: member.id,
+          x,
+          y,
+          member,
+          hasChildren: children.length > 0,
+          collapsed: true
+        });
+        
+        return {
+          width: minSpacing,
+          nodes
+        };
+      }
+
+      // 计算子节点的布局
+      let lastChildEndX = offset;
+      let childrenNodes = [];
+
+      for (const child of children) {
+        const childOffset = lastChildEndX;
         const result = traverse(child, level + 1, childOffset);
-        
-        // 更新总宽度，确保至少有最小间距
-        if (i > 0) {
-          totalWidth += Math.max(minSpacing, result.width);
-        } else {
-          totalWidth = result.width;
-        }
-        
+        totalWidth += result.width;
         lastChildEndX = childOffset + result.width;
         childrenNodes = childrenNodes.concat(result.nodes);
       }
@@ -111,54 +124,65 @@ Page({
       totalWidth = Math.max(totalWidth, minSpacing);
 
       // 计算当前节点的位置
-      // 将节点放置在其子节点的中心
       const x = children.length > 0 
         ? offset + totalWidth / 2 
         : offset + minSpacing / 2;
-      const y = level * this.data.levelHeight;
+      const y = this.data.verticalPadding + (level * this.data.levelHeight);
 
       // 创建节点数据
-      const node = {
+      nodes.push({
         id: member.id,
         x,
         y,
         member,
-        hasChildren: children.length > 0
-      };
+        hasChildren: children.length > 0,
+        collapsed: isCollapsed
+      });
 
-      nodes.push(node);
       return {
         width: totalWidth,
-        nodes: [node, ...childrenNodes]
+        nodes: isCollapsed ? nodes : nodes.concat(childrenNodes)
       };
     };
 
-    // 从根节点开始遍历
-    const rootNode = this.data.members.find(m => !m.parentId);
-    if (rootNode) {
-      const result = traverse(rootNode, 0, 0);
-      return result.nodes;
-    }
-    return [];
+    return traverse(rootMember, 0, 0).nodes;
   },
 
   // 渲染家谱树
   renderFamilyTree() {
-    const nodes = this.calculateTreeLayout();
-    this.setData({
-      treeNodes: nodes
-    });
+    const rootMember = this.data.members.find(m => !m.parentId);
+    if (rootMember) {
+      const result = this.calculateTreeLayout(rootMember);
+      this.setData({
+        treeNodes: result
+      });
+    }
   },
 
   // 节点点击事件
   onNodeTap(e) {
-    const member = e.currentTarget.dataset.member;
-    console.log("member clicked", member)
-    // 弹出一个弹框 信息
-    wx.showModal({
-      title: '成员信息',
-      content: `姓名: ${member.name}\n年龄: ${member.age}\n性别: ${member.gender}\n父亲: ${member.fatherName}\n母亲: ${member.motherName}`,
-    })
+    const nodeId = e.currentTarget.dataset.id;
+    const action = e.target.dataset.action;
+    
+    if (action === 'toggle') {
+      // 处理折叠/展开操作
+      const treeNodes = this.data.treeNodes;
+      const node = treeNodes.find(n => n.id === nodeId);
+      if (node) {
+        node.collapsed = !node.collapsed;
+        this.setData({ treeNodes }, () => {
+          // 重新计算布局并渲染
+          this.renderFamilyTree();
+        });
+      }
+    } else {
+      // 显示成员详情
+      const member = e.currentTarget.dataset.member;
+      this.setData({
+        currentMember: member,
+        showMemberDetail: true
+      });
+    }
   },
 
   // 搜索成员

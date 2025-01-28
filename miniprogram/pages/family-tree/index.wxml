@@ -15,11 +15,18 @@
     <view class="family-tree">
       <block wx:for="{{treeNodes}}" wx:key="id">
         <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
-          <view class="node-content" bindtap="onNodeTap" data-member="{{item.member}}">
+          <view class="node-content" bindtap="onNodeTap" data-id="{{item.id}}" data-member="{{item.member}}">
             <image class="avatar" src="{{item.member.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
             <text class="name">{{item.member.name}}</text>
+            <view wx:if="{{item.hasChildren}}" 
+                  class="toggle-btn {{item.collapsed ? 'collapsed' : 'expanded'}}" 
+                  catchtap="onNodeTap" 
+                  data-id="{{item.id}}" 
+                  data-action="toggle">
+              {{item.collapsed ? '+' : '-'}}
+            </view>
           </view>
-          <view class="node-connection" wx:if="{{item.hasChildren}}"></view>
+          <view class="node-connection" wx:if="{{item.hasChildren && !item.collapsed}}"></view>
         </view>
       </block>
     </view>
