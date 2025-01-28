@@ -26,29 +26,39 @@ Page({
   async loadFamilyData() {
     try {
       wx.showLoading({ title: '加载中...' });
+      
       const { result } = await wx.cloud.callFunction({
         name: 'familyMember',
         data: { action: 'get' }
       });
 
+      console.log('云函数返回结果:', result);
+
       if (result.success) {
+        if (!Array.isArray(result.data)) {
+          throw new Error('返回数据格式错误');
+        }
+
         this.setData({ 
           members: result.data
         }, () => {
-          console.log("memnbers::", this.data.members);
           this.renderFamilyTree();
         });
+
+        if (result.data.length === 0) {
+          wx.showToast({
+            title: '家谱损坏，请询问郑锁成',
+            icon: 'none'
+          });
+        }
       } else {
-        wx.showToast({
-          title: '加载失败',
-          icon: 'error'
-        });
+        throw new Error(result.message || '加载失败');
       }
     } catch (error) {
-      console.error('加载家谱数据失败:', error);
+      console.error('家谱损坏了，请询问郑锁成:', error);
       wx.showToast({
-        title: '加载失败',
-        icon: 'error'
+        title: error.message || '家谱损坏，请询问郑锁成',
+        icon: 'none'
       });
     } finally {
       wx.hideLoading();
@@ -259,56 +269,16 @@ Page({
   },
 
   // 选择父节点
-  selectParent: function() {
-    // 过滤掉当前正在编辑的成员（如果有）
-    const members = this.data.members.filter(m => {
-      // 如果是编辑现有成员，排除自己和所有子孙节点
-      if (this.data.newMember._id) {
-        // 检查是否是自己或子孙节点
-        const isDescendant = (potentialParentId) => {
-          if (!potentialParentId) return false;
-          if (potentialParentId === this.data.newMember._id) return true;
-          const parent = this.data.members.find(m => m._id === potentialParentId);
-          return parent ? isDescendant(parent.parentId) : false;
-        };
-        return !isDescendant(m._id);
-      }
-      return true; // 如果是新成员，显示所有可能的父节点
-    });
-
-    const items = members.map(m => ({
-      name: m.name,
-      value: m._id
-    }));
-
-    if (items.length === 0) {
-      wx.showToast({
-        title: '没有可选择的父节点',
-        icon: 'none'
+  selectParent: function(e) {
+    const index = e.detail.value;
+    const selectedMember = this.data.members[index];
+    
+    if (selectedMember) {
+      this.setData({
+        selectedParentId: selectedMember._id,
+        selectedParentName: selectedMember.name
       });
-      return;
     }
-
-    wx.showActionSheet({
-      itemList: items.map(item => item.name),
-      success: (res) => {
-        if (res.tapIndex >= 0 && res.tapIndex < items.length) {
-          const selected = items[res.tapIndex];
-          console.log("selet3ec::",selected);
-          if (selected && selected.value) {
-            this.setData({
-              selectedParentId: selected.value,
-              selectedParentName: selected.name
-            });
-          } else {
-            wx.showToast({
-              title: '选择父节点失败',
-              icon: 'none'
-            });
-          }
-        }
-      }
-    });
   },
 
   // 提交新成员

@@ -68,18 +68,16 @@
           </picker>
         </view>
         <view class="form-group">
-          <text class="label">关系</text>
-          <input name="relation" class="input" placeholder="例如：父亲、母亲、儿子等" value="{{newMember.relation}}" />
-        </view>
-        <view class="form-group">
           <text class="label">简介</text>
           <textarea name="description" class="textarea" placeholder="请输入简介" value="{{newMember.description}}"></textarea>
         </view>
         <view class="form-group">
           <text class="label">选择父节点</text>
-          <view class="parent-selector" bindtap="selectParent">
-            <text>{{selectedParentName ? selectedParentName + ' (点击更改)' : '点击选择父节点'}}</text>
-          </view>
+          <picker bindchange="selectParent" range="{{members}}" range-key="name">
+            <view class="picker-view">
+              {{selectedParentName || '点击选择父节点'}}
+            </view>
+          </picker>
         </view>
         <view class="form-actions">
           <button class="btn cancel" bindtap="cancelAdd">取消</button>
