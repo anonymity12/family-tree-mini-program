@@ -13,15 +13,15 @@
   <!-- 家谱树展示区域 -->
   <scroll-view class="family-tree-container" scroll-x="true" scroll-y="true" enhanced="true" show-scrollbar="true">
     <view class="family-tree">
-      <block wx:for="{{treeNodes}}" wx:key="id">
+      <block wx:for="{{treeNodes}}" wx:key="_id">
         <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
-          <view class="node-content" bindtap="onNodeTap" data-id="{{item.id}}" data-member="{{item.member}}">
+          <view class="node-content" bindtap="onNodeTap" data-_id="{{item._id}}" data-member="{{item.member}}">
             <image class="avatar" src="{{item.member.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
             <text class="name">{{item.member.name}}</text>
             <view wx:if="{{item.hasChildren}}" 
                   class="toggle-btn {{item.collapsed ? 'collapsed' : 'expanded'}}" 
                   catchtap="onNodeTap" 
-                  data-id="{{item.id}}" 
+                  data-_id="{{item._id}}" 
                   data-action="toggle">
               {{item.collapsed ? '+' : '-'}}
             </view>

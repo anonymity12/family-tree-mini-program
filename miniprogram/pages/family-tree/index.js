@@ -205,28 +205,26 @@ Page({
 
   // 节点点击事件
   onNodeTap(e) {
-    const nodeId = e.currentTarget.dataset.id;
+    const nodeId = e.currentTarget.dataset._id;
     const action = e.target.dataset.action;
-    console.log("nodeId", nodeId, "action:" , action)
+    console.log("nodeId", nodeId, "action:", action);
     
     if (action === 'toggle') {
       // 处理折叠/展开操作
-      const treeNodes = this.data.treeNodes;
+      const treeNodes = [...this.data.treeNodes];
       const node = treeNodes.find(n => n._id === nodeId);
       if (node) {
         node.collapsed = !node.collapsed;
         this.setData({ treeNodes }, () => {
-          // 重新计算布局并渲染
           this.renderFamilyTree();
         });
       }
     } else {
-      // 显示成员详情
+      // 处理查看成员详情
       const member = e.currentTarget.dataset.member;
-      this.setData({
-        currentMember: member,
-        showMemberDetail: true
-      });
+      if (member) {
+        this.viewMemberDetail(e);
+      }
     }
   },
 
