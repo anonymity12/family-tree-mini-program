@@ -77,6 +77,7 @@ Page({
   calculateTreeLayout(rootMember) {
     const nodes = [];
     const visited = new Set();
+    const minSpacing = this.data.nodeWidth + 40; // 最小节点间距
 
     const traverse = (member, level, offset) => {
       if (!member || visited.has(member.id)) return { width: 0, nodes: [] };
@@ -86,19 +87,34 @@ Page({
       const children = this.data.members.filter(m => m.parentId === member.id);
       let totalWidth = 0;
       let childrenNodes = [];
+      let lastChildEndX = offset; // 跟踪最后一个子节点的结束位置
 
       // 递归处理子节点
-      children.forEach((child, index) => {
-        const result = traverse(child, level + 1, totalWidth);
-        totalWidth += result.width;
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        // 确保每个子树从上一个子树的结束位置开始
+        const childOffset = Math.max(lastChildEndX, offset + totalWidth);
+        const result = traverse(child, level + 1, childOffset);
+        
+        // 更新总宽度，确保至少有最小间距
+        if (i > 0) {
+          totalWidth += Math.max(minSpacing, result.width);
+        } else {
+          totalWidth = result.width;
+        }
+        
+        lastChildEndX = childOffset + result.width;
         childrenNodes = childrenNodes.concat(result.nodes);
-      });
+      }
 
       // 如果没有子节点，设置最小宽度
-      totalWidth = Math.max(totalWidth, this.data.nodeWidth);
+      totalWidth = Math.max(totalWidth, minSpacing);
 
       // 计算当前节点的位置
-      const x = offset + totalWidth / 2;
+      // 将节点放置在其子节点的中心
+      const x = children.length > 0 
+        ? offset + totalWidth / 2 
+        : offset + minSpacing / 2;
       const y = level * this.data.levelHeight;
 
       // 创建节点数据
