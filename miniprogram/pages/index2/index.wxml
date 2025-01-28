@@ -1,0 +1,88 @@
+<!--index.wxml-->
+<view class="page-container">
+  <image class="page-background" src="../../images/bgbg.jpg" mode="aspectFill"></image>
+  
+  <view class="content-container">
+    <!-- Header section with profile -->
+    <view class="header-section">
+      <view class="profile-info">
+        <view class="avatar-container">
+          <image class="avatar" src="{{userInfo.avatarUrl || '../../images/default-avatar.png'}}" mode="aspectFill"></image>
+        </view>
+        <view class="user-stats">
+          <view class="stat-row">
+            <text class="stat-label">沈复</text>
+            <text class="stat-value">{{userInfo.nickName || '未登录'}}</text>
+          </view>
+          <view class="stat-row">
+            <text class="stat-label">打卡天数</text>
+            <text class="stat-value">{{userInfo.checkInDays || '0'}} 天</text>
+          </view>
+          <view class="stat-row">
+            <text class="stat-label">连续打卡</text>
+            <text class="stat-value">{{userInfo.streakDays || '0'}} 天</text>
+          </view>
+          <view class="stat-row">
+            <text class="stat-label">星星币</text>
+            <text class="stat-value">{{userInfo.totalPoints || '0'}} 个</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Check-in statistics section -->
+    <view class="checkin-stats">
+      <view class="stats-title">本周星星</view>
+      <view class="stats-chart">
+        <view class="chart-container">
+          <view class="chart-bars">
+            <view class="bar" wx:for="{{7}}" wx:key="index" style="height: {{(index + 3) * 10}}%"></view>
+          </view>
+          <view class="stats-numbers">
+            <text>255 GN</text>
+            <text>355 GN</text>
+            <text>455 GN</text>
+            <text>635 GN</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Quick Check-in section -->
+    <view class="quick-checkin">
+      <view class="quick-checkin-title">今日打卡</view>
+      <view class="checkin-options">
+        <view class="checkin-option" bindtap="handleCheckin" data-type="exercise">
+          <image class="option-icon" src="../../images/exercise-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">运动</text>
+        </view>
+        <view class="checkin-option" bindtap="handleCheckin" data-type="reading">
+          <image class="option-icon" src="../../images/reading-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">阅读</text>
+        </view>
+        <view class="checkin-option" bindtap="handleCheckin" data-type="study">
+          <image class="option-icon" src="../../images/study-icon.svg" mode="aspectFit"></image>
+          <text class="option-text">学习</text>
+        </view>
+      </view>
+      <button class="checkin-button" bindtap="submitCheckin">
+        <text class="button-text">确认打卡</text>
+        <text class="button-desc">点击这里完成今日打卡</text>
+      </button>
+    </view>
+
+    <!-- Family members check-in summary -->
+    <view class="family-summary">
+      <view class="section-title">排行榜</view>
+      <view class="family-grid">
+        <view class="family-member" wx:for="{{familyMembers}}" wx:key="id">
+          <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <text class="member-name">{{item.name}}</text>
+          <view class="member-stats">
+            <view class="stat-dot" wx:for="{{item.stats}}" wx:key="index" style="background-color: {{item}}"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,88 +1,96 @@
-<!--index.wxml-->
-<view class="page-container">
-  <image class="page-background" src="../../images/bgbg.jpg" mode="aspectFill"></image>
-  
-  <view class="content-container">
-    <!-- Header section with profile -->
-    <view class="header-section">
-      <view class="profile-info">
-        <view class="avatar-container">
-          <image class="avatar" src="{{userInfo.avatarUrl || '../../images/default-avatar.png'}}" mode="aspectFill"></image>
+<view class="container">
+  <!-- 家谱树展示区域 -->
+  <scroll-view class="family-tree-container" scroll-x="true" scroll-y="true" enhanced="true" show-scrollbar="true">
+    <view class="family-tree">
+      <block wx:for="{{treeNodes}}" wx:key="_id">
+        <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
+          <view class="node-content" bindtap="onNodeTap" data-_id="{{item._id}}" data-member="{{item.member}}">
+            <image class="avatar" src="{{item.member.avatar || '/images/avatar1.svg'}}" mode="aspectFill"></image>
+            <text class="name">{{item.member.name}}</text>
+            <view wx:if="{{item.hasChildren}}" 
+                  class="toggle-btn {{item.collapsed ? 'collapsed' : 'expanded'}}" 
+                  catchtap="onNodeTap" 
+                  data-_id="{{item._id}}" 
+                  data-action="toggle">
+              {{item.collapsed ? '+' : '-'}}
+            </view>
+          </view>
+          <view class="node-connection" wx:if="{{item.hasChildren && !item.collapsed}}"></view>
         </view>
-        <view class="user-stats">
-          <view class="stat-row">
-            <text class="stat-label">沈复</text>
-            <text class="stat-value">{{userInfo.nickName || '未登录'}}</text>
-          </view>
-          <view class="stat-row">
-            <text class="stat-label">打卡天数</text>
-            <text class="stat-value">{{userInfo.checkInDays || '0'}} 天</text>
-          </view>
-          <view class="stat-row">
-            <text class="stat-label">连续打卡</text>
-            <text class="stat-value">{{userInfo.streakDays || '0'}} 天</text>
-          </view>
-          <view class="stat-row">
-            <text class="stat-label">星星币</text>
-            <text class="stat-value">{{userInfo.totalPoints || '0'}} 个</text>
-          </view>
-        </view>
-      </view>
+      </block>
     </view>
+  </scroll-view>
 
-    <!-- Check-in statistics section -->
-    <view class="checkin-stats">
-      <view class="stats-title">本周星星</view>
-      <view class="stats-chart">
-        <view class="chart-container">
-          <view class="chart-bars">
-            <view class="bar" wx:for="{{7}}" wx:key="index" style="height: {{(index + 3) * 10}}%"></view>
-          </view>
-          <view class="stats-numbers">
-            <text>255 GN</text>
-            <text>355 GN</text>
-            <text>455 GN</text>
-            <text>635 GN</text>
-          </view>
+  <!-- 成员详情弹窗 -->
+  <view class="member-detail-modal" wx:if="{{showMemberDetail}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">成员详情</text>
+        <text class="close-btn" bindtap="closeMemberDetail">×</text>
+      </view>
+      <view class="member-info">
+        <view class="info-item">
+          <text class="label">姓名：</text>
+          <text>{{currentMember.name}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">出生日期：</text>
+          <text>{{currentMember.birthDate}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">关系：</text>
+          <text>{{currentMember.relation}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">简介：</text>
+          <text>{{currentMember.description}}</text>
         </view>
       </view>
     </view>
+  </view>
 
-    <!-- Quick Check-in section -->
-    <view class="quick-checkin">
-      <view class="quick-checkin-title">今日打卡</view>
-      <view class="checkin-options">
-        <view class="checkin-option" bindtap="handleCheckin" data-type="exercise">
-          <image class="option-icon" src="../../images/exercise-icon.svg" mode="aspectFit"></image>
-          <text class="option-text">运动</text>
-        </view>
-        <view class="checkin-option" bindtap="handleCheckin" data-type="reading">
-          <image class="option-icon" src="../../images/reading-icon.svg" mode="aspectFit"></image>
-          <text class="option-text">阅读</text>
-        </view>
-        <view class="checkin-option" bindtap="handleCheckin" data-type="study">
-          <image class="option-icon" src="../../images/study-icon.svg" mode="aspectFit"></image>
-          <text class="option-text">学习</text>
-        </view>
+  <!-- 添加成员弹窗 -->
+  <view class="member-modal" wx:if="{{showAddModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">添加家庭成员</text>
+        <text class="close-btn" bindtap="cancelAdd">×</text>
       </view>
-      <button class="checkin-button" bindtap="submitCheckin">
-        <text class="button-text">确认打卡</text>
-        <text class="button-desc">点击这里完成今日打卡</text>
-      </button>
-    </view>
-
-    <!-- Family members check-in summary -->
-    <view class="family-summary">
-      <view class="section-title">排行榜</view>
-      <view class="family-grid">
-        <view class="family-member" wx:for="{{familyMembers}}" wx:key="id">
-          <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
-          <text class="member-name">{{item.name}}</text>
-          <view class="member-stats">
-            <view class="stat-dot" wx:for="{{item.stats}}" wx:key="index" style="background-color: {{item}}"></view>
+      <form bindsubmit="submitNewMember">
+        <view class="form-group">
+          <text class="label">姓名</text>
+          <input name="name" class="input" placeholder="请输入姓名" value="{{newMember.name}}" />
+        </view>
+        <view class="form-group">
+          <text class="label">出生日期</text>
+          <picker name="birthDate" mode="date" value="{{newMember.birthDate}}" start="1900-01-01" end="2100-12-31" bindchange="onBirthDateChange">
+            <view class="picker-view">{{newMember.birthDate || '请选择出生日期'}}</view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="label">关系</text>
+          <input name="relation" class="input" placeholder="例如：父亲、母亲、儿子等" value="{{newMember.relation}}" />
+        </view>
+        <view class="form-group">
+          <text class="label">简介</text>
+          <textarea name="description" class="textarea" placeholder="请输入简介" value="{{newMember.description}}"></textarea>
+        </view>
+        <view class="form-group">
+          <text class="label">选择父节点</text>
+          <view class="parent-selector" bindtap="selectParent">
+            <text>{{selectedParentName ? selectedParentName + ' (点击更改)' : '点击选择父节点'}}</text>
           </view>
         </view>
-      </view>
+        <view class="form-actions">
+          <button class="btn cancel" bindtap="cancelAdd">取消</button>
+          <button class="btn submit" form-type="submit">确定</button>
+        </view>
+      </form>
     </view>
+  </view>
+  <!-- 工具栏 -->
+  <view class="toolbar">
+    <button class="tool-btn" bindtap="addMember">添加成员</button>
+    <button class="tool-btn" bindtap="onSearch">搜索家庭成员</button>
   </view>
 </view>
