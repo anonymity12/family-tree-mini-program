@@ -15,6 +15,7 @@ Page({
     newMember: {}, // 新成员数据
     selectedParentId: null, // 选择的父节点ID
     selectedParentName: '', // 选择的父节点名称
+    scale: 1.0,
   },
 
   onLoad: function(options) {
@@ -138,7 +139,8 @@ Page({
 
       // 检查节点是否已折叠
       const existingNode = this.data.treeNodes ? this.data.treeNodes.find(n => n._id === member._id) : null;
-      const isCollapsed = existingNode ? existingNode.collapsed : false;
+      // 默认设置为折叠状态，除非之前已经被展开过
+      const isCollapsed = existingNode ? existingNode.collapsed : true;
 
       // 如果节点已折叠，不处理其子节点
       if (isCollapsed) {
@@ -241,10 +243,10 @@ Page({
   // 搜索成员
   onSearch: function(e) {
     const searchText = e.detail.value;
-    // 暂时不实现搜索逻辑，而是仅仅弹出一个弹窗，说明功能正在开发中，可以联系作者获取更多信息
+    // 暂时不实现搜索逻辑，而是勘误，而是仅仅弹出一个弹窗，说明功能正在开发中，可以联系作者获取更多信息
     wx.showModal({
-      title: '搜索成员',  
-      content: `搜索功能出问题啦，请联系 郑锁成 进行反映`,
+      title: '反馈错误',  
+      content: `联系锁成提供更多信息`,
     })
   },
 
@@ -374,5 +376,17 @@ Page({
       showMemberDetail: false,
       currentMember: null
     });
+  },
+
+  onZoomIn() {
+    let newScale = this.data.scale + 0.2;
+    if (newScale > 3) newScale = 3;
+    this.setData({ scale: newScale });
+  },
+
+  onZoomOut() {
+    let newScale = this.data.scale - 0.2;
+    if (newScale < 0.5) newScale = 0.5;
+    this.setData({ scale: newScale });
   }
 });

@@ -1,7 +1,11 @@
 <view class="container">
   <!-- 家谱树展示区域 -->
   <scroll-view class="family-tree-container" scroll-x="true" scroll-y="true" enhanced="true" show-scrollbar="true">
-    <view class="family-tree">
+    <view class="zoom-controls">
+      <view class="zoom-btn" bindtap="onZoomIn">+</view>
+      <view class="zoom-btn" bindtap="onZoomOut">-</view>
+    </view>
+    <view class="family-tree" style="transform: scale({{scale}}); transform-origin: 0 0;">
       <block wx:for="{{treeNodes}}" wx:key="_id">
         <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
           <view class="node-content" bindtap="onNodeTap" data-_id="{{item._id}}" data-member="{{item.member}}">
@@ -89,6 +93,6 @@
   <!-- 工具栏 -->
   <view class="toolbar">
     <button class="tool-btn" bindtap="addMember">添加成员</button>
-    <button class="tool-btn" bindtap="onSearch">搜索家庭成员</button>
+    <button class="tool-btn" bindtap="onSearch">信息勘误</button>
   </view>
 </view>
