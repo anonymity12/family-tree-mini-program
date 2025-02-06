@@ -114,6 +114,29 @@
   <view class="toolbar">
     <button bindtap="showPasswordDialog">添加成员</button>
     <button bindtap="showHelp">使用说明</button>
+    <button bindtap="showSearchModal">搜索</button>
+  </view>
+
+  <!-- 搜索弹窗 -->
+  <view class="search-modal" wx:if="{{showSearchModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">搜索家庭成员</text>
+        <text class="close-btn" bindtap="closeSearchModal">×</text>
+      </view>
+      <view class="modal-body">
+        <input 
+          type="text" 
+          placeholder="请输入成员姓名" 
+          bindinput="onSearchInputChange"
+          value="{{searchQuery}}"
+        />
+      </view>
+      <view class="modal-footer">
+        <button bindtap="performSearch">搜索</button>
+        <button bindtap="closeSearchModal">取消</button>
+      </view>
+    </view>
   </view>
 
   <!-- 密码验证弹窗 -->

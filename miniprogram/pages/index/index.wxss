@@ -482,3 +482,61 @@
 .password-modal .modal-footer button {
   min-width: 80px;
 }
+
+/* 搜索弹窗样式 */
+.search-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.search-modal .modal-content {
+  background-color: white;
+  width: 80%;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-modal .modal-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.search-modal .close-btn {
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+}
+
+.search-modal .modal-body input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.search-modal .modal-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-modal .modal-footer button {
+  flex: 1;
+  margin: 0 5px;
+}

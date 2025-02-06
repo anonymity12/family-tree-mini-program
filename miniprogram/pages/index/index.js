@@ -18,6 +18,9 @@ Page({
     selectedParentId: null, // 选择的父节点ID
     selectedParentName: '', // 选择的父节点名称
     scale: 1.0,
+    showSearchModal: false, // 搜索弹窗
+    searchQuery: '', // 搜索查询
+    searchResults: [], // 搜索结果
   },
 
   onLoad: function(options) {
@@ -462,5 +465,68 @@ Page({
     wx.navigateTo({
       url: '/pages/help/help'
     });
-  }
+  },
+
+  // 显示搜索弹窗
+  showSearchModal() {
+    this.setData({
+      showSearchModal: true,
+      searchQuery: '',
+      searchResults: []
+    });
+  },
+
+  // 关闭搜索弹窗
+  closeSearchModal() {
+    this.setData({
+      showSearchModal: false,
+      searchQuery: '',
+      searchResults: []
+    });
+  },
+
+  // 处理搜索输入变化
+  onSearchInputChange: function(e) {
+    this.setData({
+      searchQuery: e.detail.value
+    });
+  },
+
+  // 执行搜索
+  performSearch() {
+    const { searchQuery, members } = this.data;
+    
+    if (!searchQuery) {
+      wx.showToast({
+        title: '请输入搜索关键词',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 根据姓名进行模糊搜索
+    const results = members.filter(member => 
+      member.name.includes(searchQuery)
+    );
+
+    if (results.length === 0) {
+      wx.showToast({
+        title: '未找到匹配的成员',
+        icon: 'none'
+      });
+    } else {
+      this.setData({
+        searchResults: results
+      });
+      
+      // 可以在这里添加跳转到搜索结果页面或者高亮显示的逻辑
+      wx.showModal({
+        title: '搜索结果',
+        content: results.map(member => member.name).join(', '),
+        showCancel: false
+      });
+    }
+
+    this.closeSearchModal();
+  },
 });
