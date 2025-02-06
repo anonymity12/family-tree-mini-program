@@ -1,0 +1,45 @@
+<view class="help-container">
+  <view class="section">
+    <view class="title">关于家谱小程序</view>
+    <view class="content">
+      本小程序旨在帮助用户创建、管理和查看家族谱系。通过数字化的方式，让传统的家谱记录更加便捷和现代化。
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="title">主要功能</view>
+    <view class="content">
+      <view class="feature">• 添加家庭成员信息</view>
+      <view class="feature">• 建立家庭成员关系</view>
+      <view class="feature">• 查看家谱树状图</view>
+      <view class="feature">• 搜索家庭成员</view>
+      <view class="feature">• 编辑和更新信息</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="title">使用说明</view>
+    <view class="content">
+      <view>1. 首页展示家谱树形结构</view>
+      <view>2. 点击"添加成员"可新增家庭成员</view>
+      <view>3. 点击已有成员可查看/编辑详细信息</view>
+      <view>4. 使用搜索功能可快速定位成员</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="title">设计理念</view>
+    <view class="content">
+      采用现代化的云开发技术，结合传统家谱的记录方式，打造简单易用的电子家谱。数据存储在云端，确保信息安全且便于随时查看。
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="title">联系方式</view>
+    <view class="content">
+      如有问题或建议，请联系开发者：
+      <view class="contact">Email: 3060326200@qq.com</view>
+      <view class="contact">微信: tiantianpaul</view>
+    </view>
+  </view>
+</view>

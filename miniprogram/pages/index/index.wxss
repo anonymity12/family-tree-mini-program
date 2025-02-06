@@ -398,3 +398,87 @@
 .zoom-btn:active {
   background: #f0f0f0;
 }
+
+/* 工具栏样式 */
+.toolbar {
+  position: fixed;
+  bottom: 20px;
+  z-index: 100;
+}
+
+.toolbar button {
+  background-color: #07c160;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: none;
+}
+
+.toolbar button:active {
+  background-color: #06ad55;
+}
+
+/* 密码验证弹窗样式 */
+.password-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.password-modal .modal-content {
+  background: white;
+  width: 80%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.password-modal .modal-header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.password-modal .modal-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.password-modal .close-btn {
+  font-size: 20px;
+  color: #999;
+}
+
+.password-modal .modal-body {
+  padding: 20px;
+}
+
+.password-modal input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.password-modal .modal-footer {
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #eee;
+}
+
+.password-modal .modal-footer button {
+  min-width: 80px;
+}

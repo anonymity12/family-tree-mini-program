@@ -12,6 +12,8 @@ Page({
     horizontalGap: 50, // 节点之间的水平间距
     verticalPadding: 100, // 顶部内边距
     showAddModal: false, // 添加成员弹窗
+    showPasswordDialog: false, // 密码验证弹窗
+    inputPassword: '', // 输入的密码
     newMember: {}, // 新成员数据
     selectedParentId: null, // 选择的父节点ID
     selectedParentName: '', // 选择的父节点名称
@@ -280,13 +282,50 @@ Page({
 
   // 添加新成员
   addMember: function() {
-    // 打开添加成员弹窗
+    // 显示密码验证弹窗
+    this.showPasswordDialog();
+  },
+
+  // 显示密码验证弹窗
+  showPasswordDialog() {
     this.setData({
-      showAddModal: true,
-      newMember: {},
-      selectedParentId: null,
-      selectedParentName: ''
+      showPasswordDialog: true,
+      inputPassword: ''
     });
+  },
+
+  // 关闭密码验证弹窗
+  closePasswordDialog() {
+    this.setData({
+      showPasswordDialog: false,
+      inputPassword: ''
+    });
+  },
+
+  // 处理密码输入
+  onPasswordInput: function(e) {
+    console.log("input: ", e.detail.value)
+    this.setData({
+      inputPassword: e.detail.value
+    });
+  },
+
+  // 验证密码
+  verifyPassword() {
+    const correctPassword = '1212'; // 这里设置正确的密码
+    console.log("pass: ", this.data.inputPassword)
+    if (this.data.inputPassword === correctPassword) {
+      this.setData({
+        showPasswordDialog: false,
+        showAddModal: true,
+        inputPassword: ''
+      });
+    } else {
+      wx.showToast({
+        title: '密码错误',
+        icon: 'error'
+      });
+    }
   },
 
   // 获取父节点显示文本
@@ -416,5 +455,12 @@ Page({
     let newScale = this.data.scale - 0.2;
     if (newScale < 0.5) newScale = 0.5;
     this.setData({ scale: newScale });
+  },
+
+  // 显示使用说明页面
+  showHelp() {
+    wx.navigateTo({
+      url: '/pages/help/help'
+    });
   }
 });

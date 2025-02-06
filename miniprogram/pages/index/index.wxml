@@ -111,5 +111,25 @@
     </view>
   </view>
   <!-- 工具栏 -->
-  
+  <view class="toolbar">
+    <button bindtap="showPasswordDialog">添加成员</button>
+    <button bindtap="showHelp">使用说明</button>
+  </view>
+
+  <!-- 密码验证弹窗 -->
+  <view class="password-modal" wx:if="{{showPasswordDialog}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">请输入管理密码</text>
+        <text class="close-btn" bindtap="closePasswordDialog">×</text>
+      </view>
+      <view class="modal-body">
+        <input type="password" maxlength="4" password placeholder="请输入4位数字密码" bindinput="onPasswordInput" />
+      </view>
+      <view class="modal-footer">
+        <button bindtap="verifyPassword">确认</button>
+        <button bindtap="closePasswordDialog">取消</button>
+      </view>
+    </view>
+  </view>
 </view>
