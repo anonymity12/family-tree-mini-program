@@ -124,14 +124,15 @@ Page({
   // 计算树形布局
   calculateTreeLayout(rootMember) {
     const minSpacing = this.data.nodeWidth + this.data.horizontalGap;
-    const processedNodes = new Set(); // 用于跟踪已处理的节点
+    const processedNodes = new Set();
+    const verticalLineHeight = 25; // 竖线的高度
 
     const traverse = (member, level, offset) => {
       if (!member || processedNodes.has(member._id)) {
         return { width: 0, nodes: [] };
       }
 
-      processedNodes.add(member._id); // 标记当前节点为已处理
+      processedNodes.add(member._id);
 
       const nodes = [];
       let totalWidth = 0;
@@ -139,7 +140,6 @@ Page({
 
       // 检查节点是否已折叠
       const existingNode = this.data.treeNodes ? this.data.treeNodes.find(n => n._id === member._id) : null;
-      // 默认设置为折叠状态，除非之前已经被展开过
       const isCollapsed = existingNode ? existingNode.collapsed : true;
 
       // 如果节点已折叠，不处理其子节点
@@ -156,7 +156,7 @@ Page({
           collapsed: true
         });
         
-        processedNodes.delete(member._id); // 移除处理标记，允许在其他分支中使用
+        processedNodes.delete(member._id);
         return {
           width: minSpacing,
           nodes
@@ -175,29 +175,57 @@ Page({
         childrenNodes = childrenNodes.concat(result.nodes);
       }
 
-      // 如果没有子节点，设置最小宽度
       totalWidth = Math.max(totalWidth, minSpacing);
-
-      // 计算当前节点的位置
-      const x = children.length > 0 
-        ? offset + totalWidth / 2 
-        : offset + minSpacing / 2;
+      const x = children.length > 0 ? offset + totalWidth / 2 : offset + minSpacing / 2;
       const y = this.data.verticalPadding + (level * this.data.levelHeight);
 
-      // 创建节点数据
+      // 获取直接子节点
+      const directChildren = childrenNodes.filter(node => 
+        children.some(child => child._id === node._id)
+      );
+
+      // 计算连线数据
+      let connectionData = null;
+      if (children.length > 0 && !isCollapsed) {
+        const leftmostChild = directChildren[0];
+        const rightmostChild = directChildren[directChildren.length - 1];
+        
+        connectionData = {
+          // 父节点底部的竖线
+          parentLine: {
+            x: x,
+            y: y + this.data.nodeHeight / 2,
+            height: verticalLineHeight
+          },
+          // 横线（如果有多个子节点）
+          horizontalLine: directChildren.length > 1 ? {
+            x1: leftmostChild.x,
+            x2: rightmostChild.x,
+            y: y + this.data.nodeHeight / 2 + verticalLineHeight
+          } : null,
+          // 子节点顶部的竖线
+          childrenLines: directChildren.map(child => ({
+            x: child.x,
+            y: child.y - this.data.nodeHeight / 2 - verticalLineHeight,
+            height: verticalLineHeight
+          }))
+        };
+      }
+
       nodes.push({
         _id: member._id,
         x,
         y,
         member,
         hasChildren: children.length > 0,
-        collapsed: isCollapsed
+        collapsed: isCollapsed,
+        connectionData
       });
 
-      processedNodes.delete(member._id); // 移除处理标记，允许在其他分支中使用
+      processedNodes.delete(member._id);
       return {
         width: totalWidth,
-        nodes: isCollapsed ? nodes : nodes.concat(childrenNodes)
+        nodes: nodes.concat(childrenNodes)
       };
     };
 

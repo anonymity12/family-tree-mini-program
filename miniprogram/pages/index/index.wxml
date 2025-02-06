@@ -6,8 +6,32 @@
       <view class="zoom-btn" bindtap="onZoomOut">-</view>
     </view>
     <view class="family-tree" style="transform: scale({{scale}}); transform-origin: 0 0;">
+      <!-- 连线容器 -->
+      <view class="node-connections">
+        <block wx:for="{{treeNodes}}" wx:key="_id">
+          <block wx:if="{{!item.collapsed && item.connectionData}}">
+            <!-- 父节点底部竖线 -->
+            <view class="connection-line vertical"
+                  style="left: {{item.connectionData.parentLine.x}}px; top: {{item.connectionData.parentLine.y}}px; height: {{item.connectionData.parentLine.height}}px;">
+            </view>
+            
+            <!-- 横线（如果有多个子节点） -->
+            <view wx:if="{{item.connectionData.horizontalLine}}"
+                  class="connection-line horizontal"
+                  style="left: {{item.connectionData.horizontalLine.x1}}px; top: {{item.connectionData.horizontalLine.y}}px; width: {{item.connectionData.horizontalLine.x2 - item.connectionData.horizontalLine.x1}}px;">
+            </view>
+            
+            <!-- 子节点顶部竖线 -->
+            <block wx:for="{{item.connectionData.childrenLines}}" wx:for-item="childLine" wx:key="x">
+              <view class="connection-line vertical"
+                    style="left: {{childLine.x}}px; top: {{childLine.y}}px; height: {{childLine.height}}px;">
+              </view>
+            </block>
+          </block>
+        </block>
+      </view>
       <block wx:for="{{treeNodes}}" wx:key="_id">
-        <view class="tree-node" style="left: {{item.x}}px; top: {{item.y}}px">
+        <view class="tree-node" style="left: {{item.x}}px;top: {{item.y}}px">
           <view class="node-content" bindtap="onNodeTap" data-_id="{{item._id}}" data-member="{{item.member}}">
             <image class="avatar" src="{{item.member.avatar || '/images/avatar1.svg'}}" mode="aspectFill"></image>
             <text class="name">{{item.member.name}}</text>
@@ -40,10 +64,6 @@
         <view class="info-item">
           <text class="label">出生日期：</text>
           <text>{{currentMember.birthDate}}</text>
-        </view>
-        <view class="info-item">
-          <text class="label">关系：</text>
-          <text>{{currentMember.relation}}</text>
         </view>
         <view class="info-item">
           <text class="label">简介：</text>
@@ -91,8 +111,5 @@
     </view>
   </view>
   <!-- 工具栏 -->
-  <view class="toolbar">
-    <button class="tool-btn" bindtap="addMember">添加成员</button>
-    <button class="tool-btn" bindtap="onSearch">信息勘误</button>
-  </view>
+  
 </view>
