@@ -21,11 +21,14 @@ Page({
     showSearchModal: false, // 搜索弹窗
     searchQuery: '', // 搜索查询
     searchResults: [], // 搜索结果
+    showSearchResultModal: false // 搜索结果弹窗
   },
 
   onLoad: function(options) {
     // 初始化家谱数据
-    this.loadFamilyData();
+    this.loadFamilyData().then(() => {
+      this.renderFamilyTree();
+    });
   },
 
   // 加载家谱数据
@@ -47,25 +50,30 @@ Page({
 
         this.setData({ 
           members: result.data
-        }, () => {
-          this.renderFamilyTree();
         });
 
         if (result.data.length === 0) {
           wx.showToast({
-            title: '家谱损坏，请询问郑锁成',
+            title: '暂无家庭成员',
             icon: 'none'
           });
         }
+
+        return result.data; // 返回成员数据
       } else {
-        throw new Error(result.message || '加载失败');
+        wx.showToast({
+          title: '加载家庭成员失败',
+          icon: 'none'
+        });
+        return []; // 返回空数组
       }
     } catch (error) {
-      console.error('家谱损坏了，请询问郑锁成:', error);
+      console.error('加载家庭成员出错:', error);
       wx.showToast({
-        title: error.message || '家谱损坏，请询问郑锁成',
+        title: '网络错误',
         icon: 'none'
       });
+      return []; // 返回空数组
     } finally {
       wx.hideLoading();
     }
@@ -487,14 +495,24 @@ Page({
 
   // 处理搜索输入变化
   onSearchInputChange: function(e) {
+    console.log('Input event:', e);
+    console.log('Input value:', e.detail.value);
+    
+    const searchQuery = e.detail.value || '';
+    
     this.setData({
-      searchQuery: e.detail.value
+      searchQuery: searchQuery
     });
+    
+    console.log('Current searchQuery:', this.data.searchQuery);
   },
 
   // 执行搜索
   performSearch() {
     const { searchQuery, members } = this.data;
+    
+    console.log('Search query:', searchQuery);
+    console.log('Total members:', members ? members.length : 'No members');
     
     if (!searchQuery) {
       wx.showToast({
@@ -504,29 +522,78 @@ Page({
       return;
     }
 
+    if (!members || members.length === 0) {
+      // 如果成员列表为空，重新加载家庭成员数据
+      this.loadFamilyData().then(() => {
+        this.performSearch(); // 重新执行搜索
+      });
+      return;
+    }
+
     // 根据姓名进行模糊搜索
     const results = members.filter(member => 
       member.name.includes(searchQuery)
     );
 
-    if (results.length === 0) {
+    console.log('Raw search results:', results);
+
+    // 确保每个结果都有唯一标识
+    const searchResults = results.map(member => ({
+      ...member,
+      id: member._id || member.id || Math.random().toString(36).substr(2, 9)
+    }));
+
+    console.log('Processed search results:', searchResults);
+
+    // 分两步设置数据，确保数据正确传递
+    this.setData({
+      searchResults: []  // 先清空
+    }, () => {
+      // 在回调中设置新的搜索结果
+      this.setData({
+        searchResults: searchResults,
+        showSearchResultModal: true
+      }, () => {
+        console.log('Final searchResults:', this.data.searchResults);
+        console.log('Final searchResults length:', this.data.searchResults.length);
+      });
+    });
+
+    // 如果没有找到结果，显示提示
+    if (searchResults.length === 0) {
       wx.showToast({
         title: '未找到匹配的成员',
         icon: 'none'
       });
-    } else {
-      this.setData({
-        searchResults: results
-      });
-      
-      // 可以在这里添加跳转到搜索结果页面或者高亮显示的逻辑
-      wx.showModal({
-        title: '搜索结果',
-        content: results.map(member => member.name).join(', '),
-        showCancel: false
-      });
     }
 
     this.closeSearchModal();
+  },
+
+  // 关闭搜索结果弹窗
+  closeSearchResultModal() {
+    this.setData({
+      showSearchResultModal: false,
+      searchResults: []
+    });
+  },
+
+  // 导航到成员详情页
+  navigateToMemberDetail(e) {
+    const memberId = e.currentTarget.dataset.id;
+    console.log('memberId:', memberId);
+    
+    // 确保memberId存在且不为空
+    if (!memberId) {
+      wx.showToast({
+        title: '无效的成员ID',
+        icon: 'none'
+      });
+      return;
+    }
+
+    wx.navigateTo({
+      url: `/pages/member-detail/member-detail?id=${memberId}`
+    });
   },
 });

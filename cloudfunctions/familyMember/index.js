@@ -73,8 +73,41 @@ exports.main = async (event, context) => {
       }
 
     case 'getById':
-      // 根据ID获取成员，不做 OPENID 限制
-      return await db.collection('family_members').doc(data._id).get()
+      try {
+        // 尝试使用传入的ID获取成员信息
+        const { memberId } = data;
+        console.log('inside getById: memberId:', memberId);
+        
+        if (!memberId) {
+          return {
+            success: false,
+            message: '未提供有效的成员ID'
+          };
+        }
+
+        const result = await db.collection('family_members').doc(memberId).get();
+        
+        return {
+          success: true,
+          data: result.data,
+          message: '获取成员信息成功'
+        };
+      } catch (error) {
+        console.error('获取成员详情失败:', error);
+        
+        // 区分不同的错误类型
+        if (error.errCode === 'DATABASE_RESOURCE_NOT_FOUND') {
+          return {
+            success: false,
+            message: '未找到指定的成员'
+          };
+        }
+        
+        return {
+          success: false,
+          message: error.message || '获取成员信息失败'
+        };
+      }
 
     default:
       return {

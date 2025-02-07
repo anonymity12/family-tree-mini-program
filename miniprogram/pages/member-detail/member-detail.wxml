@@ -1,0 +1,39 @@
+<view class="container">
+  <view class="member-detail">
+    <view class="avatar-container">
+      <image class="avatar" src="{{member.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    </view>
+    
+    <view class="info-section">
+      <view class="info-row">
+        <text class="label">姓名</text>
+        <text class="value">{{member.name}}</text>
+      </view>
+      
+      <view class="info-row">
+        <text class="label">性别</text>
+        <text class="value">{{member.gender}}</text>
+      </view>
+      
+      <view class="info-row">
+        <text class="label">出生日期</text>
+        <text class="value">{{member.birthDate}}</text>
+      </view>
+      
+      <view class="info-row">
+        <text class="label">父亲</text>
+        <text class="value">{{member.fatherName || '未知'}}</text>
+      </view>
+      
+      <view class="info-row">
+        <text class="label">母亲</text>
+        <text class="value">{{member.motherName || '未知'}}</text>
+      </view>
+    </view>
+    
+    <view wx:if="{{member.description}}" class="description-section">
+      <text class="label">个人描述</text>
+      <text class="description">{{member.description}}</text>
+    </view>
+  </view>
+</view>

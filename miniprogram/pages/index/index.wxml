@@ -130,11 +130,49 @@
           placeholder="请输入成员姓名" 
           bindinput="onSearchInputChange"
           value="{{searchQuery}}"
+          confirm-type="search"
+          bindconfirm="performSearch"
         />
       </view>
       <view class="modal-footer">
         <button bindtap="performSearch">搜索</button>
         <button bindtap="closeSearchModal">取消</button>
+      </view>
+    </view>
+  </view>
+  <!-- 搜索结果弹窗 -->
+  <view class="search-result-modal" wx:if="{{showSearchResultModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">搜索结果</text>
+        <text class="close-btn" bindtap="closeSearchResultModal">×</text>
+      </view>
+      <view class="modal-body">
+        <block wx:if="{{searchResults.length > 0}}">
+          <view 
+            wx:for="{{searchResults}}" 
+            wx:key="id" 
+            class="search-result-item"
+            bindtap="navigateToMemberDetail"
+            data-id="{{item.id}}"
+          >
+            <image 
+              class="member-avatar" 
+              src="{{item.avatarUrl || '/images/default-avatar.png'}}" 
+              mode="aspectFill"
+            ></image>
+            <view class="member-info">
+              <text class="member-name">{{item.name}}</text>
+              <text class="member-description">{{item.description || '暂无描述'}}</text>
+            </view>
+            <text class="arrow">›</text>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="no-results">
+            <text>未找到匹配的成员</text>
+          </view>
+        </block>
       </view>
     </view>
   </view>
