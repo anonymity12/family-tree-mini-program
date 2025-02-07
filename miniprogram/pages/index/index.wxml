@@ -112,9 +112,21 @@
   </view>
   <!-- 工具栏 -->
   <view class="toolbar">
-    <button bindtap="showPasswordDialog">添加成员</button>
-    <button bindtap="showHelp">使用说明</button>
-    <button bindtap="showSearchModal">搜索</button>
+    <button 
+      class="tool-btn" 
+      bindtap="showPasswordDialog"
+      size="mini"
+    >添加成员</button>
+    <button 
+      class="tool-btn" 
+      bindtap="showHelp"
+      size="mini"
+    >使用说明</button>
+    <button 
+      class="tool-btn" 
+      bindtap="showSearchModal"
+      size="mini"
+    >搜索</button>
   </view>
 
   <!-- 搜索弹窗 -->
