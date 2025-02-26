@@ -62,3 +62,39 @@
   color: #333;
   line-height: 1.6;
 }
+.edit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+}
+
+.description-input {
+  border: 1rpx solid #ddd;
+  padding: 10rpx;
+  margin-top: 10rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20rpx;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}

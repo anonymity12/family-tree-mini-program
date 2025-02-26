@@ -1,6 +1,8 @@
 Page({
   data: {
-    member: null
+    member: {},
+    isEditMode: false,
+    editedMember: {}
   },
 
   onLoad(options) {
@@ -65,5 +67,59 @@ Page({
         }
       });
     });
-  }
+  },
+  // Toggle between view and edit modes
+  toggleEditMode() {
+    this.setData({
+      isEditMode: !this.data.isEditMode,
+      editedMember: { ...this.data.member }
+    });
+  },
+
+  // Handle input changes in edit mode
+  handleInputChange(e) {
+    const { field } = e.currentTarget.dataset;
+    const { value } = e.detail;
+    
+    this.setData({
+      [`editedMember.${field}`]: value
+    });
+  },
+
+  // Save edited member information
+  saveEditedMember() {
+    // TODO: Implement cloud function or API call to update member info
+    wx.cloud.callFunction({
+      name: 'updateFamilyMember',
+      data: {
+        memberId: this.data.member._id,
+        updates: this.data.editedMember
+      },
+      success: (res) => {
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success'
+        });
+        this.setData({
+          member: this.data.editedMember,
+          isEditMode: false
+        });
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none'
+        });
+        console.error('Update failed', err);
+      }
+    });
+  },
+
+  // Cancel editing and revert changes
+  cancelEdit() {
+    this.setData({
+      isEditMode: false,
+      editedMember: { ...this.data.member }
+    });
+  },
 });
