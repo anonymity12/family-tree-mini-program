@@ -70,6 +70,9 @@
           <text>{{currentMember.description}}</text>
         </view>
       </view>
+      <view class="modal-footer">
+        <button class="detail-btn" bindtap="navigateToMemberDetail">查看更多详情</button>
+      </view>
     </view>
   </view>
 

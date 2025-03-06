@@ -596,4 +596,13 @@ Page({
       url: `/pages/member-detail/member-detail?id=${memberId}`
     });
   },
+
+  // 导航到成员详情页
+  navigateToMemberDetail() {
+    const memberId = this.data.currentMember._id;
+    wx.navigateTo({
+      url: `/pages/member-detail/member-detail?id=${memberId}`
+    });
+    this.closeMemberDetail(); // 关闭当前弹窗
+  },
 });

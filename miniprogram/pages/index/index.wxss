@@ -371,6 +371,26 @@
   color: white;
 }
 
+.modal-footer {
+  margin-top: 20px;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.detail-btn {
+  background-color: #07c160;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 14px;
+  border: none;
+}
+
+.detail-btn:active {
+  opacity: 0.8;
+}
+
 .zoom-controls {
   position: fixed;
   right: 20rpx;
