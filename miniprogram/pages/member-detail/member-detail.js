@@ -88,14 +88,21 @@ Page({
 
   // Save edited member information
   saveEditedMember() {
-    // TODO: Implement cloud function or API call to update member info
+    wx.showLoading({ title: '保存中...' });
+    
+    // Call the familyMember cloud function with update action
     wx.cloud.callFunction({
-      name: 'updateFamilyMember',
+      name: 'familyMember',
       data: {
-        memberId: this.data.member._id,
-        updates: this.data.editedMember
-      },
-      success: (res) => {
+        action: 'update',
+        data: {
+          _id: this.data.member._id,
+          ...this.data.editedMember
+        }
+      }
+    }).then(res => {
+      wx.hideLoading();
+      if (res.result && res.result.stats && res.result.stats.updated > 0) {
         wx.showToast({
           title: '保存成功',
           icon: 'success'
@@ -104,14 +111,17 @@ Page({
           member: this.data.editedMember,
           isEditMode: false
         });
-      },
-      fail: (err) => {
-        wx.showToast({
-          title: '保存失败',
-          icon: 'none'
-        });
-        console.error('Update failed', err);
+      } else {
+        throw new Error('Update failed');
       }
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('Update failed:', err);
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none',
+        duration: 2000
+      });
     });
   },
 
@@ -120,6 +130,35 @@ Page({
     this.setData({
       isEditMode: false,
       editedMember: { ...this.data.member }
+    });
+  },
+
+  // 选择图片
+  chooseImage: function() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        // 上传图片到云存储
+        const tempFilePath = res.tempFilePaths[0];
+        wx.showLoading({ title: '上传中...' });
+        
+        const cloudPath = `avatars/${Date.now()}.jpg`;
+        wx.cloud.uploadFile({
+          cloudPath,
+          filePath: tempFilePath,
+          success: res => {
+            this.setData({
+              'editedMember.avatarUrl': res.fileID
+            });
+          },
+          fail: console.error,
+          complete: () => {
+            wx.hideLoading();
+          }
+        });
+      }
     });
   },
 });

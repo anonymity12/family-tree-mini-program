@@ -1,33 +1,33 @@
 <view class="container">
   <view class="member-detail">
-    <view class="avatar-container">
-      <image class="avatar" src="{{member.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
-    </view>
-    
-    <view class="info-section">
-      <view class="info-row">
-        <text class="label">姓名</text>
-        <text class="value">{{member.name}}</text>
-      </view>
-      
-      <view class="info-row">
-        <text class="label">出生日期</text>
-        <text class="value">{{member.birthDate}}</text>
-      </view>
-      
-      <view class="info-row">
-        <text class="label">父亲</text>
-        <text class="value">{{member.fatherName || '未知'}}</text>
-      </view>
-      
-      <view class="info-row">
-        <text class="label">母亲</text>
-        <text class="value">{{member.motherName || '未知'}}</text>
-      </view>
-    </view>
-
-    <!-- Existing view mode -->
+    <!-- View mode -->
     <view wx:if="{{!isEditMode}}">
+      <view class="avatar-container">
+        <image class="avatar" src="{{member.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      </view>
+      
+      <view class="info-section">
+        <view class="info-row">
+          <text class="label">姓名</text>
+          <text class="value">{{member.name}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">出生日期</text>
+          <text class="value">{{member.birthDate}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">父亲</text>
+          <text class="value">{{member.fatherName || '未知'}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="label">母亲</text>
+          <text class="value">{{member.motherName || '未知'}}</text>
+        </view>
+      </view>
+
       <view wx:if="{{member.description}}" class="description-section">
         <text class="label">个人描述</text>
         <text class="description">{{member.description}}</text>
@@ -40,6 +40,60 @@
 
     <!-- Edit mode -->
     <view wx:else class="edit-mode">
+      <view class="avatar-container">
+        <image class="avatar" src="{{editedMember.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="avatar-edit" bindtap="chooseImage">
+          <text class="edit-icon">📷</text>
+          <text class="edit-text">更换头像</text>
+        </view>
+      </view>
+
+      <view class="info-section">
+        <view class="info-row">
+          <text class="label">姓名</text>
+          <input 
+            class="input-field" 
+            value="{{editedMember.name}}" 
+            data-field="name"
+            bindinput="handleInputChange"
+            placeholder="请输入姓名"
+          />
+        </view>
+        
+        <view class="info-row">
+          <text class="label">出生日期</text>
+          <input 
+            class="input-field" 
+            value="{{editedMember.birthDate}}" 
+            data-field="birthDate"
+            bindinput="handleInputChange"
+            placeholder="请输入出生日期"
+          />
+        </view>
+        
+        <view class="info-row">
+          <text class="label">父亲</text>
+          <input 
+            class="input-field" 
+            value="{{editedMember.fatherName}}" 
+            data-field="fatherName"
+            bindinput="handleInputChange"
+            placeholder="请输入父亲姓名"
+          />
+        </view>
+        
+        <view class="info-row">
+          <text class="label">母亲</text>
+          <input 
+            class="input-field" 
+            value="{{editedMember.motherName}}" 
+            data-field="motherName"
+            bindinput="handleInputChange"
+            placeholder="请输入母亲姓名"
+          />
+        </view>
+      </view>
+
       <view class="description-section">
         <text class="label">个人描述</text>
         <textarea 
