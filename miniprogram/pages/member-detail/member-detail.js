@@ -34,7 +34,9 @@ Page({
       name: 'familyMember',
       data: {
         action: 'getById',
-        data: memberId  // 直接传递memberId作为data
+        data: {
+          memberId: memberId
+        }
       }
     }).then(res => {
       wx.hideLoading();
@@ -48,9 +50,11 @@ Page({
         wx.showToast({
           title: res.result.message || '获取成员信息失败',
           icon: 'none',
-          duration: 8000,
+          duration: 2000,
           complete: () => {
-            wx.navigateBack();
+            setTimeout(() => {
+              wx.navigateBack();
+            }, 2000);
           }
         });
       }
@@ -97,12 +101,17 @@ Page({
         action: 'update',
         data: {
           _id: this.data.member._id,
-          ...this.data.editedMember
+          name: this.data.editedMember.name,
+          birthDate: this.data.editedMember.birthDate,
+          fatherName: this.data.editedMember.fatherName,
+          motherName: this.data.editedMember.motherName,
+          description: this.data.editedMember.description,
+          avatarUrl: this.data.editedMember.avatarUrl
         }
       }
     }).then(res => {
       wx.hideLoading();
-      if (res.result && res.result.stats && res.result.stats.updated > 0) {
+      if (res.result.success) {
         wx.showToast({
           title: '保存成功',
           icon: 'success'
@@ -112,13 +121,13 @@ Page({
           isEditMode: false
         });
       } else {
-        throw new Error('Update failed');
+        throw new Error(res.result.message || '更新失败');
       }
     }).catch(err => {
       wx.hideLoading();
       console.error('Update failed:', err);
       wx.showToast({
-        title: '保存失败',
+        title: err.message || '保存失败',
         icon: 'none',
         duration: 2000
       });

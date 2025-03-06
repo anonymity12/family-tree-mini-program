@@ -44,13 +44,36 @@ exports.main = async (event, context) => {
     
 
     case 'update':
-      // 更新成员信息，允许所有用户更新
-      return await db.collection('family_members').doc(data._id).update({
-        data: {
-          ...data,
-          updatedAt: new Date()
+      try {
+        const { _id, ...updateData } = data;
+        // 更新成员信息，允许所有用户更新
+        const result = await db.collection('family_members').doc(_id).update({
+          data: {
+            ...updateData,
+            updateTime: db.serverDate()
+          }
+        });
+
+        if (result.stats.updated > 0) {
+          return {
+            success: true,
+            stats: result.stats,
+            message: '更新成功'
+          };
+        } else {
+          return {
+            success: false,
+            stats: result.stats,
+            message: '更新失败'
+          };
         }
-      })
+      } catch (error) {
+        return {
+          success: false,
+          error: error.message,
+          message: '更新失败'
+        };
+      }
 
     case 'delete':
       // 删除成员，允许所有用户删除
@@ -87,6 +110,13 @@ exports.main = async (event, context) => {
 
         const result = await db.collection('family_members').doc(memberId).get();
         
+        if (!result.data) {
+          return {
+            success: false,
+            message: '未找到该成员信息'
+          };
+        }
+
         return {
           success: true,
           data: result.data,
@@ -96,7 +126,7 @@ exports.main = async (event, context) => {
         console.error('获取成员详情失败:', error);
         
         // 区分不同的错误类型
-        if (error.errCode === 'DATABASE_RESOURCE_NOT_FOUND') {
+        if (error.errCode === -502002) {
           return {
             success: false,
             message: '未找到指定的成员'
