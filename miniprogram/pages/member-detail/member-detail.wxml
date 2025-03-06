@@ -42,12 +42,13 @@
     <view wx:else class="edit-mode">
       <view class="description-section">
         <text class="label">个人描述</text>
-        <input 
-          class="description-input" 
+        <textarea 
+          class="description-textarea" 
           value="{{editedMember.description}}" 
           data-field="description"
           bindinput="handleInputChange"
           placeholder="请输入个人描述"
+          maxlength="-1"
         />
       </view>
       

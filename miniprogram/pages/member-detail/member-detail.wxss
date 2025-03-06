@@ -62,6 +62,19 @@
   color: #333;
   line-height: 1.6;
 }
+
+.description-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
 .edit-button-container {
   display: flex;
   justify-content: center;
