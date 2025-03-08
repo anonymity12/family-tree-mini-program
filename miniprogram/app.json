@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/locationShare/locationShare",
     "pages/index/index",
     "pages/help/help",
     "pages/member-detail/member-detail"
@@ -8,7 +9,7 @@
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "郑氏家谱",
+    "navigationBarTitleText": "摩托车位置分享",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",

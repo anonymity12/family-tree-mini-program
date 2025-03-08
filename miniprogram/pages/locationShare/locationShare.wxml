@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="location-list">
+    <view class="location-item" wx:for="{{locations}}" wx:key="id">
+      <view class="location-info">
+        <view class="location-header">
+          <text class="location-name">{{item.locationName}}</text>
+          <text class="location-type {{item.type === 'danger' ? 'danger' : 'scenic'}}">
+            {{item.type === 'danger' ? '危险地点' : '风景地点'}}
+          </text>
+        </view>
+        <view class="location-details">
+          <text class="location-address">{{item.address}}</text>
+          <view class="location-meta">
+            <text class="submitter">提交人: {{item.submitter}}</text>
+            <text class="submit-time">{{item.submitTime}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="add-button" bindtap="navigateToAdd">
+    <text class="add-icon">+</text>
+  </view>
+</view>
