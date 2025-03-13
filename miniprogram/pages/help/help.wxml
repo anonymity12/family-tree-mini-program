@@ -9,9 +9,9 @@
   <view class="section">
     <view class="title">主要功能</view>
     <view class="content">
-      <view class="feature">• 添加家庭成员信息</view>
-      <view class="feature">• 建立家庭成员关系</view>
       <view class="feature">• 查看家谱树状图</view>
+      <view class="feature">• 建立家庭成员关系</view>
+      <view class="feature">• 添加家庭成员信息</view>
       <view class="feature">• 搜索家庭成员</view>
       <view class="feature">• 编辑和更新信息</view>
     </view>
@@ -21,7 +21,7 @@
     <view class="title">使用说明</view>
     <view class="content">
       <view>1. 首页展示家谱树形结构</view>
-      <view>2. 点击"添加成员"可新增家庭成员</view>
+      <view>2. 点击"修缮家谱"可 新增，编辑，删除 家庭成员</view>
       <view>3. 点击已有成员可查看/编辑详细信息</view>
       <view>4. 使用搜索功能可快速定位成员</view>
     </view>
@@ -37,6 +37,9 @@
   <view class="section">
     <view class="title">联系方式</view>
     <view class="content">
+      如有信息有误，请联系当前家谱管理员：
+      <view class="contact">郑锁成</view>
+      <view class="contact">微信: zscn23</view>
       如有问题或建议，请联系开发者：
       <view class="contact">Email: 3060326200@qq.com</view>
       <view class="contact">微信: tiantianpaul</view>
