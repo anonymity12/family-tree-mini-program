@@ -1,0 +1,58 @@
+<!--pages/member-manage/member-manage.wxml-->
+<view class="container">
+  <view class="form-section">
+    <form bindsubmit="submitNewMember">
+      <view class="form-title">{{isEditing ? '编辑成员' : '添加新成员'}}</view>
+      
+      <view class="form-group">
+        <text class="label">姓名</text>
+        <input name="name" class="input" placeholder="请输入姓名" value="{{newMember.name}}" />
+      </view>
+      
+      <view class="form-group">
+        <text class="label">出生日期</text>
+        <picker name="birthDate" mode="date" value="{{newMember.birthDate}}" start="1900-01-01" end="2100-12-31" bindchange="onBirthDateChange">
+          <view class="picker-view">{{newMember.birthDate || '请选择出生日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-group">
+        <text class="label">简介</text>
+        <textarea name="description" class="textarea" placeholder="请输入简介" value="{{newMember.description}}"></textarea>
+      </view>
+      
+      <view class="form-group">
+        <text class="label">选择父节点</text>
+        <picker bindchange="selectParent" range="{{members}}" range-key="name">
+          <view class="picker-view">
+            {{selectedParentName || '点击选择父节点'}}
+          </view>
+        </picker>
+      </view>
+      
+      <view class="form-actions">
+        <button class="btn cancel" bindtap="cancel">取消</button>
+        <button class="btn submit" form-type="submit">{{isEditing ? '更新' : '添加'}}</button>
+      </view>
+    </form>
+  </view>
+
+  <view class="members-list">
+    <view class="list-title">全部的家庭成员：</view>
+    <block wx:if="{{members.length > 0}}">
+      <view class="member-item" wx:for="{{members}}" wx:key="_id">
+        <view class="member-info">
+          <view class="member-name">{{item.name}}</view>
+          <view class="member-date" wx:if="{{item.birthDate}}">出生日期: {{item.birthDate}}</view>
+        </view>
+        <view class="member-actions">
+          <view class="action-btn edit" bindtap="editMember" data-id="{{item._id}}">编辑</view>
+          <view class="action-btn delete" bindtap="deleteMember" data-id="{{item._id}}">删除</view>
+        </view>
+      </view>
+    </block>
+    <view class="empty-list" wx:else>
+      <text>暂无成员，请添加</text>
+    </view>
+  </view>
+</view>

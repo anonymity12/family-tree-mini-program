@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/help/help",
-    "pages/member-detail/member-detail"
+    "pages/member-detail/member-detail",
+    "pages/member-manage/member-manage"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

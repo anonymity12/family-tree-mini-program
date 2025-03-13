@@ -11,12 +11,8 @@ Page({
     levelHeight: 200, // 层级高度
     horizontalGap: 50, // 节点之间的水平间距
     verticalPadding: 100, // 顶部内边距
-    showAddModal: false, // 添加成员弹窗
     showPasswordDialog: false, // 密码验证弹窗
     inputPassword: '', // 输入的密码
-    newMember: {}, // 新成员数据
-    selectedParentId: null, // 选择的父节点ID
-    selectedParentName: '', // 选择的父节点名称
     scale: 1.0,
     showSearchModal: false, // 搜索弹窗
     searchQuery: '', // 搜索查询
@@ -291,12 +287,6 @@ Page({
     })
   },
 
-  // 添加新成员
-  addMember: function() {
-    // 显示密码验证弹窗
-    this.showPasswordDialog();
-  },
-
   // 显示密码验证弹窗
   showPasswordDialog() {
     this.setData({
@@ -331,6 +321,10 @@ Page({
         showAddModal: true,
         inputPassword: ''
       });
+      // 导航到成员管理页面
+      wx.navigateTo({
+        url: '/pages/member-manage/member-manage'
+      });
     } else {
       wx.showToast({
         title: '密码错误',
@@ -361,79 +355,6 @@ Page({
     }
   },
 
-  // 提交新成员
-  submitNewMember: async function(e) {
-    const formData = e.detail.value;
-    if (!formData.name) {
-      wx.showToast({
-        title: '请输入姓名',
-        icon: 'none'
-      });
-      return;
-    }
-
-    try {
-      wx.showLoading({ title: '保存中...' });
-      const memberData = {
-        ...formData,
-        parentId: this.data.selectedParentId
-      };
-
-      const { result } = await wx.cloud.callFunction({
-        name: 'familyMember',
-        data: {
-          action: 'add',
-          data: memberData
-        }
-      });
-
-      if (result.success) {
-        wx.showToast({
-          title: '添加成功',
-          icon: 'success'
-        });
-        this.setData({
-          showAddModal: false
-        });
-        // 重新加载数据
-        this.loadFamilyData();
-      } else {
-        wx.showToast({
-          title: '添加失败',
-          icon: 'error'
-        });
-      }
-    } catch (error) {
-      console.error('添加成员失败:', error);
-      wx.showToast({
-        title: '添加失败',
-        icon: 'error'
-      });
-    } finally {
-      wx.hideLoading();
-    }
-  },
-
-  // 取消添加
-  cancelAdd: function() {
-    this.setData({
-      showAddModal: false
-    });
-  },
-
-  // 处理出生日期变更
-  onBirthDateChange: function(e) {
-    this.setData({
-      ['newMember.birthDate']: e.detail.value
-    });
-  },
-
-  // 切换编辑模式
-  editMode: function() {
-    this.setData({
-      isEditMode: !this.data.isEditMode
-    });
-  },
 
   // 查看成员详情
   viewMemberDetail: function(e) {

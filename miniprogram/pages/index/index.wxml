@@ -76,50 +76,15 @@
     </view>
   </view>
 
-  <!-- 添加成员弹窗 -->
-  <view class="member-modal" wx:if="{{showAddModal}}">
-    <view class="modal-content">
-      <view class="modal-header">
-        <text class="modal-title">添加家庭成员</text>
-        <text class="close-btn" bindtap="cancelAdd">×</text>
-      </view>
-      <form bindsubmit="submitNewMember">
-        <view class="form-group">
-          <text class="label">姓名</text>
-          <input name="name" class="input" placeholder="请输入姓名" value="{{newMember.name}}" />
-        </view>
-        <view class="form-group">
-          <text class="label">出生日期</text>
-          <picker name="birthDate" mode="date" value="{{newMember.birthDate}}" start="1900-01-01" end="2100-12-31" bindchange="onBirthDateChange">
-            <view class="picker-view">{{newMember.birthDate || '请选择出生日期'}}</view>
-          </picker>
-        </view>
-        <view class="form-group">
-          <text class="label">简介</text>
-          <textarea name="description" class="textarea" placeholder="请输入简介" value="{{newMember.description}}"></textarea>
-        </view>
-        <view class="form-group">
-          <text class="label">选择父节点</text>
-          <picker bindchange="selectParent" range="{{members}}" range-key="name">
-            <view class="picker-view">
-              {{selectedParentName || '点击选择父节点'}}
-            </view>
-          </picker>
-        </view>
-        <view class="form-actions">
-          <button class="btn cancel" bindtap="cancelAdd">取消</button>
-          <button class="btn submit" form-type="submit">确定</button>
-        </view>
-      </form>
-    </view>
-  </view>
+  <!-- 添加成员弹窗已移除，现在使用专门的成员管理页面 -->
+
   <!-- 工具栏 -->
   <view class="toolbar">
     <button 
       class="tool-btn" 
       bindtap="showPasswordDialog"
       size="mini"
-    >添加成员</button>
+    >修缮家谱</button>
     <button 
       class="tool-btn" 
       bindtap="showHelp"
@@ -129,7 +94,7 @@
       class="tool-btn" 
       bindtap="showSearchModal"
       size="mini"
-    >搜索</button>
+    >搜索亲友</button>
   </view>
 
   <!-- 搜索弹窗 -->
