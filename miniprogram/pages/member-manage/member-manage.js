@@ -184,6 +184,12 @@ Page({
         isEditing: true,
         currentMemberId: member._id
       });
+      
+      // 将页面滚动到顶部
+      wx.pageScrollTo({
+        scrollTop: 0,
+        duration: 300 // 滚动动画持续时间，单位ms
+      });
     }
   },
 
